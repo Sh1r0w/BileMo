@@ -4,13 +4,25 @@ namespace App\DataFixtures;
 
 use App\Entity\Customer;
 use App\Entity\Mobile;
+use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class AppFixtures extends Fixture
 {
+
+    public function __construct(UserPasswordHasherInterface $userPasswordHasher) {
+        $this->userPasswordHasher = $userPasswordHasher;
+    }
     public function load(ObjectManager $manager): void
     {
+
+        $userAdmin = new User();
+        $userAdmin->setEmail("admin@bilemo.com");
+        $userAdmin->setRoles(["ROLDE_ADMIN"]);
+        $userAdmin->setPassword($this->userPasswordHasher->hashPassword($userAdmin, "password"));
+        $manager->persist($userAdmin);
         
         for ($i = 0; $i < 20; $i++) {
             $mobile = new Mobile;
