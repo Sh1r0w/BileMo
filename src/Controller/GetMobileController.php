@@ -8,11 +8,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class GetMobileController extends AbstractController
 {
     #[Route('/api/mobile', name: 'app_get_mobile', methods: ['GET'])]
+    #[IsGranted('ROLE_USER', message: 'Vous n\'avez pas les droits suffisants pour voir les mobiles')]
     public function getMobile(MobileRepository $mobileRepository, SerializerInterface $serializer): JsonResponse
     {
 
@@ -23,6 +25,7 @@ class GetMobileController extends AbstractController
     }
 
     #[Route('/api/mobile/{id}', name: 'app_get_one_mobile', methods: ['GET'])]
+    #[IsGranted('ROLE_USER', message: 'Vous n\'avez pas les droits suffisants pour voir les mobiles')]
     public function getOneMobile(Mobile $mobile, SerializerInterface $serilizer): JsonResponse
     {
         $jsonMobile = $serilizer->serialize($mobile, 'json');
