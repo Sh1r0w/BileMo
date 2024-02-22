@@ -21,6 +21,15 @@ class MobileRepository extends ServiceEntityRepository
         parent::__construct($registry, Mobile::class);
     }
 
+    public function mobilePaginated($page, $limit) 
+    {
+        $list = $this->createQueryBuilder('b')
+                ->setFirstResult(($page - 1) * $limit)
+                ->setMaxResults($limit);
+            
+            return $list->getQuery()->getResult();
+    }
+
 //    /**
 //     * @return Mobile[] Returns an array of Mobile objects
 //     */
