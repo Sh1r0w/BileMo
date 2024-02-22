@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
-use Symfony\Component\Serializer\SerializerInterface;
+use JMS\Serializer\SerializerInterface;
 use Symfony\Contracts\Cache\ItemInterface;
 use Symfony\Contracts\Cache\TagAwareCacheInterface;
 use Nelmio\ApiDocBundle\Annotation\Model;
@@ -20,7 +20,7 @@ use OpenApi\Attributes as OA;
 class GetMobileController extends AbstractController
 {
 
-    #[OA\Response(response:200,description: "Retourne la liste des mobiles Attributes", content: new Model(type: Mobile::class))]
+    #[OA\Response(response:200, description: "Retourne la liste des mobiles Attributes", content: new Model(type: Mobile::class))]
     #[OA\Parameter(name: "page", in: "query", description: "La page que l'on veut récupérer")]
     #[OA\Parameter(name: "limit", in: "query", description: "Le nombre d'éléments que l'on veut récupérer")]
     #[OA\Tag(name: "Mobile")]
@@ -50,7 +50,7 @@ class GetMobileController extends AbstractController
 
     #[OA\Response(response:200,description: "Retourne un Mobile grace à son ID", content: new Model(type: Mobile::class))]
     #[OA\Tag(name: "Mobile")]
-    #[Route('/api/mobile/{id}', name: 'app_get_one_mobile', methods: ['GET'])]
+    #[Route('/api/mobile/{id}', name: 'detailMobile', methods: ['GET'])]
     #[IsGranted('ROLE_USER', message: 'Vous n\'avez pas les droits suffisants pour voir les mobiles')]
     public function getOneMobile(Mobile $mobile, SerializerInterface $serilizer): JsonResponse
     {
