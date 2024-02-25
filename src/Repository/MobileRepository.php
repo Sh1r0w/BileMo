@@ -36,7 +36,7 @@ class MobileRepository extends ServiceEntityRepository
      * @return array An array of results from the query with pagination applied based on the provided
      * page number and limit.
      */
-    public function mobilePaginated($page, $limit): array
+    public function mobilePaginated(int $page,int $limit): array
     {
         $list = $this->createQueryBuilder('b')
                 ->setFirstResult(($page - 1) * $limit)
