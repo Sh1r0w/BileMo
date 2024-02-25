@@ -84,7 +84,7 @@ class CustomerController extends AbstractController
     #[OA\Tag(name: "Client")]
     #[Route('/api/customer', name: 'customer', methods: ['GET'])]
     #[IsGranted('ROLE_USER', message: 'Merci de vous connectez')]
-    public function GetCustomer(): JsonResponse
+    public function getCustomer(): JsonResponse
     {
         $customerList = $this->customerRepository->findBy(['user' => $this->getUser()->getId()]);
         $context = SerializationContext::create()->setGroups(["getCustomers"]);
