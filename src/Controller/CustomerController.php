@@ -80,7 +80,7 @@ class CustomerController extends AbstractController
      * the database based on the current user's ID, serializes the data using the Symfony Serializer
      * component, and returns a JSON response containing the list of customers.
      */
-    #[OA\Response(response:200,description: "Retourne la liste des clients d'un utilisateur", content: new Model(type: Customer::class))]
+    #[OA\Response(response:200, description: "Retourne la liste des clients d'un utilisateur", content: new Model(type: Customer::class))]
     #[OA\Tag(name: "Client")]
     #[Route('/api/customer', name: 'customer', methods: ['GET'])]
     #[IsGranted('ROLE_USER', message: 'Merci de vous connectez')]
@@ -106,7 +106,7 @@ class CustomerController extends AbstractController
      * (UNAUTHORIZED) if the condition `->getUser()->getId() == ->getUser()->getId()` is
      * not met.
      */
-    #[OA\Response(response:200,description: "Retourne un client de utilisateur", content: new Model(type: Customer::class))]
+    #[OA\Response(response:200, description: "Retourne un client de utilisateur", content: new Model(type: Customer::class))]
     #[OA\Tag(name: "Client")]
     #[Route ('/api/customer/{id}', name: 'detailCustomer', methods: ['GET'])]
     #[IsGranted('ROLE_USER', message: 'Merci de vous connectez')]
