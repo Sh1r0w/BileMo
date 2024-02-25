@@ -28,7 +28,8 @@ class CustomerController extends AbstractController
 
     /**
      * This PHP function creates a new customer entity, assigns it to the current user, persists it to
-     * the database, and returns the serialized customer data along with a HTTP 201 Created response
+     * the database.
+     * and returns the serialized customer data along with a HTTP 201 Created response
      * and a location header.
      * 
      * @param Request request The code snippet you provided is a PHP function that handles the creation
