@@ -5,8 +5,22 @@ namespace App\Entity;
 use App\Repository\MobileRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\SerializerInterface;
+use Hateoas\Configuration\Annotation as Hateoas;
 
 #[ORM\Entity(repositoryClass: MobileRepository::class)]
+
+/**
+ * @Hateoas\Relation(
+ *      "self",
+ *      href = @Hateoas\Route(
+ *       "detailMobile",
+ *          parameters = { "id" = "expr(object.getId())" } 
+ *          ),
+ *        exclusion = @Hateoas\Exclusion(groups="getMobile")
+ * )
+ * 
+ */
 class Mobile
 {
     #[ORM\Id]

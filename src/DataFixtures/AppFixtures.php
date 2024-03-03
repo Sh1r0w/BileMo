@@ -15,6 +15,14 @@ class AppFixtures extends Fixture
     public function __construct(UserPasswordHasherInterface $userPasswordHasher) {
         $this->userPasswordHasher = $userPasswordHasher;
     }
+    /**
+     * The function loads initial data into the database including users, mobiles, and customers.
+     * 
+     * @param ObjectManager manager The `manager` parameter in the `load` function is an instance of
+     * `ObjectManager` which is used in Doctrine to manage entities and perform operations like
+     * persisting and flushing entities to the database. In this context, the `manager` is being used
+     * to persist entities like `User`, `Mobile
+     */
     public function load(ObjectManager $manager): void
     {
         

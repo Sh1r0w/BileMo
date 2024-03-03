@@ -4,9 +4,32 @@ namespace App\Entity;
 
 use App\Repository\CustomerRepository;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation\Groups;
+use JMS\Serializer\Annotation\Groups;
+use JMS\Serializer\SerializerInterface;
+use Hateoas\Configuration\Annotation as Hateoas;
 
 #[ORM\Entity(repositoryClass: CustomerRepository::class)]
+
+/**
+ * @Hateoas\Relation(
+ *      "self",
+ *      href = @Hateoas\Route(
+ *       "detailCustomer",
+ *          parameters = { "id" = "expr(object.getId())" } 
+ *          ),
+ *        exclusion = @Hateoas\Exclusion(groups="getCustomers"),
+ * )
+ * 
+ *  * @Hateoas\Relation(
+ *      "delete",
+ *      href = @Hateoas\Route(
+ *       "deleteCustomer",
+ *          parameters = { "id" = "expr(object.getId())" } 
+ *          ),
+ *        exclusion = @Hateoas\Exclusion(groups="getCustomers")
+ * )
+ * 
+ */
 class Customer
 {
     #[ORM\Id]
@@ -22,7 +45,7 @@ class Customer
     #[ORM\ManyToOne(inversedBy: 'customers')]
     #[ORM\JoinColumn(nullable: false)]
     #[Groups(["getCustomers"])]
-    private ?user $user = null;
+    private ?User $user = null;
 
     public function getId(): ?int
     {
@@ -41,12 +64,12 @@ class Customer
         return $this;
     }
 
-    public function getUser(): ?user
+    public function getUser(): ?User
     {
         return $this->user;
     }
 
-    public function setUser(?user $user): static
+    public function setUser(?User $user): static
     {
         $this->user = $user;
 
