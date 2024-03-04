@@ -11,9 +11,9 @@ nelmio_api_doc:
                     tags:
                         - Token
                     operationId: postCredentialsItem
-                    summary: Permet d'obtenir le token JWT.
+                    summary: In order to obtain the JWT token.
                     requestBody:
-                          description: Crée un nouveau token JWT
+                          description: Create new token JWT
                           content:
                              application/json:
                                  schema:

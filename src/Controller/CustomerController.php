@@ -49,13 +49,15 @@ class CustomerController extends AbstractController
      */
     #[OA\Response(response:200,description: "Crée un client", content: new Model(type: Customer::class))]
     #[OA\Tag(name: "Client")]
-    #[OA\Post(path: '/api/customer', operationId: 'createCustomer', 
-    parameters: [new OA\Parameter(name: "name", in: 'path', required: true, schema: new OA\Schema(type: 'string'))])]
-    //#[OA\Parameter(name: "name", in: "path", required: true, description: "Nom du client")]
+    #[OA\Post(path: '/api/customer', operationId: 'createCustomer')]
+    #[OA\RequestBody(new OA\MediaType(mediaType: "application/json", schema: new OA\Schema( new OA\Property( property:"name", type: 'string'))))]
+    //#[OA\Parameter(name: "name", in: "query", required: true, description: "Nom du client")]
     #[Route ('/api/customer', name: 'createCustomer', methods: ['POST'])]
     #[IsGranted('ROLE_USER', message: 'Merci de vous connectez')]
     public function createCustomer(Request $request, EntityManagerInterface $em, UrlGeneratorInterface $ug,): JsonResponse
     {
+
+        //var_dump();
         $customer = $this->serializer->deserialize($request->getContent(), Customer::class, 'json');
         $customer->setUser($this->getUser());
         $em->persist($customer);
@@ -83,6 +85,8 @@ class CustomerController extends AbstractController
      */
     #[OA\Response(response:200, description: "Retourne la liste des clients d'un utilisateur", content: new Model(type: Customer::class))]
     #[OA\Tag(name: "Client")]
+    #[OA\Parameter(name: "page", in: "query", description: "La page que l'on veut récupérer")]
+    #[OA\Parameter(name: "limit", in: "query", description: "Le nombre d'éléments que l'on veut récupérer")]
     #[Route('/api/customer', name: 'customer', methods: ['GET'])]
     #[IsGranted('ROLE_USER', message: 'Merci de vous connectez')]
     public function getCustomer(): JsonResponse
@@ -151,7 +155,7 @@ class CustomerController extends AbstractController
             $em->remove($customer);
             $em->flush();
             
-            return new JsonResponse(Response::HTTP_OK);
+            return new JsonResponse(Response::HTTP_NO_CONTENT);
         }
         
         return new JsonResponse(Response::HTTP_UNAUTHORIZED);
