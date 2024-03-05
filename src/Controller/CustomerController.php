@@ -49,9 +49,9 @@ class CustomerController extends AbstractController
      */
     #[OA\Response(response:200,description: "Crée un client", content: new Model(type: Customer::class))]
     #[OA\Tag(name: "Client")]
-    #[OA\Post(path: '/api/customer', operationId: 'createCustomer')]
-    #[OA\RequestBody(new OA\MediaType(mediaType: "application/json", schema: new OA\Schema( new OA\Property( property:"name", type: 'string'))))]
-    //#[OA\Parameter(name: "name", in: "query", required: true, description: "Nom du client")]
+    //#[OA\Post(path: '/api/customer', parameters: [new OA\RequestBody( description: 'test', required: true, parameters: [ new OA\JsonContent(type: 'object', parameters: [new OA\Property(name: 'name')])])])]
+    //#[OA\RequestBody(new OA\MediaType(mediaType: "application/json", schema: new OA\Schema( new OA\Property( property:"name", type: 'string'))))]
+    //#[OA\Parameter(in: "query", content: new OA\Schema(type: object))]
     #[Route ('/api/customer', name: 'createCustomer', methods: ['POST'])]
     #[IsGranted('ROLE_USER', message: 'Merci de vous connectez')]
     public function createCustomer(Request $request, EntityManagerInterface $em, UrlGeneratorInterface $ug,): JsonResponse
