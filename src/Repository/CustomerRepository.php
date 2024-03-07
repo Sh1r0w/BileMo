@@ -20,4 +20,28 @@ class CustomerRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Customer::class);
     }
+
+
+    /**
+     * The function `customerPaginated` retrieves a paginated list of customers using Doctrine's query
+     * builder in PHP.
+     * 
+     * @param int page The `page` parameter represents the page number of the paginated results that
+     * you want to retrieve. It is used to calculate the offset for fetching a specific page of
+     * results.
+     * @param int limit The `` parameter in the `customerPaginated` function specifies the
+     * maximum number of results to be returned per page. It determines how many records will be
+     * fetched from the database in a single page of paginated results.
+     * 
+     * @return array An array of customer entities is being returned, with pagination applied based on
+     * the provided page and limit parameters.
+     */
+    public function customerPaginated(int $page,int $limit): array
+    {
+        $list = $this->createQueryBuilder('b')
+                ->setFirstResult(($page - 1) * $limit)
+                ->setMaxResults($limit);
+            
+            return $list->getQuery()->getResult();
+    }
 }
