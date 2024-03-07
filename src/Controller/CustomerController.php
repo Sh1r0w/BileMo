@@ -56,8 +56,7 @@ class CustomerController extends AbstractController
     #[IsGranted('ROLE_USER', message: 'Merci de vous connectez')]
     public function createCustomer(Request $request, EntityManagerInterface $em, UrlGeneratorInterface $ug,): JsonResponse
     {
-
-        //var_dump();
+        
         $customer = $this->serializer->deserialize($request->getContent(), Customer::class, 'json');
         $customer->setUser($this->getUser());
         $em->persist($customer);
