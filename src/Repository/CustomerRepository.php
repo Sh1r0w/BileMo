@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Customer;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @extends ServiceEntityRepository<Customer>
@@ -36,12 +37,16 @@ class CustomerRepository extends ServiceEntityRepository
      * @return array An array of customer entities is being returned, with pagination applied based on
      * the provided page and limit parameters.
      */
-    public function customerPaginated(int $page,int $limit): array
+    public function customerPaginated(int $page,int $limit, UserInterface $user): array
     {
         $list = $this->createQueryBuilder('b')
-                ->setFirstResult(($page - 1) * $limit)
-                ->setMaxResults($limit);
-            
-            return $list->getQuery()->getResult();
+        ->where('b.user = :userId')
+        ->setParameter('userId', $user->getId())
+        ->setFirstResult(($page - 1) * $limit)
+        ->setMaxResults($limit)
+        ->getQuery()
+        ->getResult();
+
+    return $list;
     }
 }
