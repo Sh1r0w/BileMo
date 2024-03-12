@@ -13,10 +13,13 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use JMS\Serializer\SerializerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Nelmio\ApiDocBundle\Annotation\Security;
 use OpenApi\Attributes as OA;
+use Symfony\Contracts\Cache\ItemInterface;
+use Symfony\Contracts\Cache\TagAwareCacheInterface;
 
 class CustomerController extends AbstractController
 {
@@ -88,9 +91,21 @@ class CustomerController extends AbstractController
     #[OA\Parameter(name: "limit", in: "query", description: "Le nombre d'éléments que l'on veut récupérer")]
     #[Route('/api/customer', name: 'customer', methods: ['GET'])]
     #[IsGranted('ROLE_USER', message: 'Merci de vous connectez')]
-    public function getCustomer(): JsonResponse
+    public function getCustomer(CustomerRepository $customerRepo, Request $request, TagAwareCacheInterface $cachePool, UserInterface $user): JsonResponse
     {
-        $customerList = $this->customerRepository->findBy(['user' => $this->getUser()->getId()]);
+
+        $page = $request->get('page', 1);
+        $limit = $request->get('limit', 3);
+        $user = $this->getUser();
+
+        $idCache = "getAllCustomer-" . $page . "-" . $limit;
+
+        $customerList = $cachePool->get($idCache, function(ItemInterface $item) use ($customerRepo, $page, $limit, $user){
+            echo("Pas de cache");
+            $item->tag("customerCache");
+            return $customerRepo->customerPaginated($page, $limit, $user);
+        });
+
         $context = SerializationContext::create()->setGroups(["getCustomers"]);
         $jsonCustomerList = $this->serializer->serialize($customerList, 'json', $context);
         return new JsonResponse($jsonCustomerList, Response::HTTP_OK, [], true);
